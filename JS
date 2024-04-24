@@ -1,0 +1,1056 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+      }
+
+      .header {
+        background-color: #3498db;
+        padding: 30px 40px;
+        color: white;
+        text-align: center;
+      }
+
+      .collapsible {
+        background-color: #555;
+        color: white;
+        cursor: pointer;
+        padding: 18px;
+        width: 100%;
+        border: none;
+        text-align: left;
+        outline: none;
+        font-size: 18px;
+      }
+
+      .collapsible:hover {
+        background-color: #333;
+      }
+
+      .active,
+      .collapsible:hover {
+        background-color: #444;
+      }
+
+      .content {
+        padding: 0 18px;
+        display: none;
+        overflow: hidden;
+        background-color: #fff;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      ul {
+        list-style-type: none;
+        padding: 0;
+      }
+
+      li {
+        cursor: pointer;
+        padding: 12px;
+        background: #eee;
+        font-size: 18px;
+        transition: 0.2s;
+        user-select: none;
+        border-bottom: 1px solid #ddd;
+      }
+
+      li:nth-child(odd) {
+        background: #f9f9f9;
+      }
+
+      li:hover {
+        background: #ddd;
+      }
+
+      li.checked {
+        background: #c2c2c2;
+        color: #888;
+        text-decoration: line-through;
+      }
+
+      li.unchecked {
+        background: #eee;
+        color: #000;
+        text-decoration: none;
+      }
+
+      .close {
+        float: right;
+        font-size: 24px;
+        color: #888;
+      }
+
+      .close:hover {
+        color: #f44336;
+      }
+
+      .addBtn {
+        padding: 10px;
+        background: #3498db;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+        border: none;
+        border-radius: 5px;
+        transition: 0.3s;
+      }
+
+      .addBtn:hover {
+        background-color: #258cd1;
+      }
+      .addCmntBtn {
+        padding: 10px;
+        background: #3498db;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+        border: none;
+        border-radius: 5px;
+        transition: 0.3s;
+      }
+
+      .addCmntBtn:hover {
+        background-color: #258cd1;
+      }
+
+      /* Modal */
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        padding-top: 100px;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4);
+      }
+
+      .modal-content {
+        background-color: #fefefe;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+        display: flex;
+        flex-direction: column;
+        padding-left: 10px;
+        padding-right: 10px;
+      }
+      .modalcontent{
+        background-color: #fefefe;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #888;
+        display: flex;
+        flex-direction: column;
+        padding-left: 10px;
+        padding-right: 10px;
+        width: 650px;
+        height: 250px;
+
+
+      }
+
+      #myTextarea {
+        width: 100%;
+        text-align: left;
+        height: 150px;
+      }
+
+      .close {
+        color: #aaa;
+        float: right;
+        font-size: 24px;
+        font-weight: bold;
+        cursor: pointer;
+      }
+
+      .close:hover,
+      .close:focus {
+        color: #000;
+        text-decoration: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="myDIV" class="header">
+      <h2 style="margin: 5px">TODO APPLICATION</h2>
+     
+
+      <input type="text" id="myInput" placeholder="Title..." />
+      <span onclick="User_Input()" class="addBtn">Add</span>
+      <input type="date" id="date" />
+      <input type="time" id="time" />
+      <select name="Categories" id="categories"></select>
+      <input type="text" id="myInput1" placeholder="add new categories" />
+      <span onclick="add_category()" class="addBtn">Add Category</span>
+      <label for="select"> priroity</label>
+      <select name="Categories" id="pirority">
+        <option value="low">low</option>
+        <option value="medium">medium</option>
+        <option value="high">high</option>
+      </select>
+      <input type="text" id="user_name" placeholder="Title..." />
+      <label for="select"> USERS</label>
+      <select name="Categories" id="users">
+        <option value="user1" id="asdc">user1</option>
+        <option value="user2" id="asdc">user2</option>
+        <option value="user3" id="asdc">user3</option>
+      </select>
+      <span onclick="addNewUser()" class="addBtn">ADD USER</span>
+    </div>
+    <br /><br />
+    <p>CATTEGORIES</p>
+    <div id="main"></div>
+    
+    <div id="detailsModal" class="modal">
+      <div class="modalcontent">
+        <span class="close" id="closeModal">&times;</span>
+        <label for="textarea"><strong>Add details</strong></label>
+        <textarea style="width: 600px; height: 400px" id="myTextarea">
+        </textarea>
+      </div>
+      
+    </div>
+
+    <div id="commentsModal" class="modal">
+      <div class="modal-content">
+        <span class="close" id="closeCmntModal">&times;</span>
+        <input class="cmntclass" id="cmntInput" placeholder="Title..." />
+        <ul style="color: #000" id="cmnt"> COMMENTS</ul>
+        <span onclick="" class="addCmntBtn" id="addCmntBtn">Add</span>
+      </div>
+      
+    </div>
+
+    <div id="editModal" class="modal">
+      <div class="modal-content">
+        <label for="select"> <strong>Add Task</strong></label>
+      <input type="text" id="modalInput" placeholder="Title..." />
+      <label for="select"> <strong>Add ExpiryDate</strong></label>
+      <input type="date" id="modaldate" />
+      <input type="time" id="modaltime" />
+      <label for="select"> <strong>Select Category</strong></label>
+      <select name="Categories" id="modalCategories"></select>
+      <span onclick="" class="addBtn" id ="move">MOVE</span>
+      <label for="select"><strong>priroity</strong> </label>
+      <select name="Categories" id="modalPirority">
+        <option value="low">low</option>
+        <option value="medium">medium</option>
+        <option value="high">high</option>
+      </select>
+      <label for="select"> <strong>USERS</strong></label>
+      <select name="Categories" id="modalUsers">
+        <option value="user1" id="asdc">user1</option>
+        <option value="user2" id="asdc">user2</option>
+        <option value="user3" id="asdc">user3</option>
+      </select>
+      <span onclick="" class="addBtn" id ="saveEdits">SAVE</span>
+      <span class="close" id="closeEditModal">&times;</span>
+
+    </div>
+
+    </div>
+
+    <script>
+      // localStorage.clear()
+      //generic functtions
+      function createElementFN(
+        element,
+        element_value,
+        element_class,
+        element_id,
+        text
+      ) {
+        let new_element = document.createElement(element);
+        if (text != null) {
+          new_element.innerHTML = text;
+        }
+        if (element_value != "") {
+          new_element.value = element_value;
+        }
+        if (element_id != null) {
+          new_element.id = element_id;
+        }
+        if (element_class != null) {
+          new_element.classList.add(element_class);
+        }
+        return new_element;
+      }
+      function checkDeleteStatusFN(c_d, id) {
+        Object.keys(tableData).forEach(function (key) {
+          if (tableData[key].length > 0) {
+            let find_obj = tableData[key].findIndex((obj) => obj.id == id);
+            console.log(find_obj);
+            for (let y of tableData[key]) {
+              if (y.id == id) {
+                console.log(tableData[key][find_obj]);
+                tableData[key].splice(find_obj, 1);
+                localStorage.setItem("data", JSON.stringify(tableData));
+                break;
+              }
+            }
+          }
+        });
+        localStorage.setItem("data", JSON.stringify(tableData));
+      }
+      let main_div = document.getElementById("main");
+      let tableData = {
+        // category: [],
+      };
+
+      if (localStorage.getItem("data")) {
+        let parsed_data = JSON.parse(localStorage.getItem("data"));
+        tableData = parsed_data;
+      } else {
+        tableData = {
+          // category: [],
+        };
+      }
+      Object.keys(tableData).forEach(function (key) {
+        let parent_select = document.getElementById("categories");
+        let parent_selectModal = document.getElementById("modalCategories");
+
+        let new_option = createElementFN("option", key, null, `${key}c`, key);
+        let new_optionModal = createElementFN("option", key, null, `${key}c`, key);
+
+        let button_div = createElementFN("div", "", null, "content");
+        let table = createElementFN("table", "", key, `${key}`);
+        let button = createElementFN("button", key, "collapsible", `${key}b`, key);
+        button_event(button, tableData[key].length, key);
+
+        parent_select.appendChild(new_option);
+        parent_selectModal.appendChild(new_optionModal);
+
+        table.appendChild(createTableHeading());
+        button_div.appendChild(table);
+        main_div.appendChild(button);
+        main_div.appendChild(button_div);
+        if (tableData[key].length > 0) {
+          for (let y of tableData[key]) {
+            let row = createElementFN("tr", "", null, y.id);
+            let tick = createElementFN("td", "", null, y.id, "&#10003");
+            let pirority = createElementFN(
+              "td",
+              y.piriority,
+              null,
+              null,
+              y.piriority
+            );
+            let title = createElementFN("td", y.title, null, y.id, y.title);
+            let created_date = createElementFN(
+              "td",
+              CurrentTime_calculate(y.created_date),
+              null,
+              null,
+              CurrentTime_calculate(y.created_date)
+            );
+            CurrentTime_calculate(y.created_date);
+            createdDate_mouseover(created_date, y.created_date);
+            
+            let expire_date = createElementFN("td", y.created_date, null, y.id);
+            markDoneAction(tick,row,expire_date)
+            timer(expire_date, y.expire, y.created_date, row);
+            let showDetails = createElementFN(
+              "td",
+              "Show Details",
+              null,
+              `${y.id}`,
+              "show Details"
+            );
+            ShowDetails(showDetails,y.areaText)
+            let delete_ = createElementFN("td", "", "close", y.id, "\u00D7");
+            delete_action(delete_);
+            let edit = createElementFN("td", "", null, y.id, "EDIT");
+            let user_td = createElementFN("td", y.user, null, null, y.user);
+            let remarks = createElementFN("td", "", null,y.id, "view remarks");
+            viewRemaks(remarks)
+
+            if(y.check_status == true){
+              row.style.backgroundColor = "green"
+              tick.innerHTML = "completed";
+            }
+            if(y.expire_status == true){
+              tick.innerHTML = "expired";
+              tick.value = "expired";
+            }
+            EditRow(edit,pirority,title,user_td,created_date,expire_date,row)
+
+
+            row.appendChild(tick);
+            row.appendChild(pirority);
+            row.appendChild(title);
+            row.appendChild(user_td);
+            row.appendChild(created_date);
+            row.appendChild(expire_date);
+            row.appendChild(showDetails);
+            row.appendChild(delete_);
+            row.appendChild(edit);
+            row.appendChild(remarks);
+
+            let main_div = document.getElementById("main");
+            let row_category = document.getElementById("categories").value;
+            // let table = document.getElementById(`${key}t`);
+            table.appendChild(row);
+          }
+        }
+      });
+
+      function User_Input() {
+        let main_div = document.getElementById("main");
+        let row_category = document.getElementById("categories").value;
+
+        let table = document.getElementById(`${row_category}`);
+        table.appendChild(createInputRow());
+      }
+
+      function createTableHeading() {
+        let user_category = document.getElementById("categories").value;
+
+        let head_row = createElementFN("tr", "", null, "head");
+        let status = createElementFN("th", "STATUS", null, null, "STATUS");
+        let pirority = createElementFN(
+          "th",
+          "PIRORITY",
+          null,
+          null,
+          "PIRORITY"
+        );
+        let task = createElementFN("th", "TASK", null, null, "TASK");
+        let assigned_to = createElementFN(
+          "th",
+          "ASIGNED TO",
+          null,
+          null,
+          "ASIGNED TO"
+        );
+        let date = createElementFN(
+          "th",
+          "CREATED DATE",
+          null,
+          null,
+          "CREATED DATE"
+        );
+        let time = createElementFN("th", "DUE DATE", null, null, "DUE DATE");
+        let details = createElementFN("th", "DETAILS", null, null, "DETAILS");
+        let delete_ = createElementFN("th", "delete", null, null, "DELETE");
+        let edit = createElementFN("th", "EDIT", null, null, "EDIT");
+        let remarks = createElementFN("th", "EDIT", null, null, "REMARKS");
+
+
+        if (user_category !== "") {
+          head_row.appendChild(status);
+          head_row.appendChild(pirority);
+          head_row.appendChild(task);
+          head_row.appendChild(assigned_to);
+          head_row.appendChild(date);
+          head_row.appendChild(time);
+          head_row.appendChild(details);
+          head_row.appendChild(delete_);
+          head_row.appendChild(edit);
+          head_row.appendChild(remarks);
+
+
+          return head_row;
+        }
+      }
+      function createInputRow() {
+        let user_value = document.getElementById("myInput").value;
+        let user_category = document.getElementById("categories").value;
+        let user_name = document.getElementById("users").value;
+        let user_pirority = document.getElementById("pirority").value;
+        let user_date = document.getElementById("date").value;
+        let user_time = document.getElementById("time").value;
+
+        let ids = document.getElementsByTagName("td");
+        title_id = ids.length + 1;
+
+        let row = createElementFN("tr", "", null, title_id);
+        let tick = createElementFN("td", "", null, title_id, "&#10003");
+        let pirority = createElementFN(
+          "td",
+          user_pirority,
+          null,
+          null,
+          user_pirority
+        );
+        let title = createElementFN(
+          "td",
+          user_value,
+          null,
+          title_id,
+          user_value
+        );
+
+        let user = document.getElementById("users").value;
+        let user_td = createElementFN("td", user, null, null, user);
+
+        let created_date_ = addCurrentTime();
+        let created_date = createElementFN("td", "", null, null,created_date_);
+        console.log(created_date_);
+        let expire_date = createElementFN(
+          "td",
+          created_date_,
+          null,
+          title_id,
+          created_date_
+        );
+        markDoneAction(tick,row,expire_date)
+        timer(expire_date, "", created_date_);
+        let date_time = user_date + " " + user_time;
+
+        let showDetails = createElementFN(
+          "td",
+          "Show Details",
+          null,
+          `${title_id}d`,
+          "show Details"
+        );
+        ShowDetails(showDetails)
+        let delete_ = createElementFN("td", "", "close", title_id, "\u00D7");
+        let edit = createElementFN("td", "", null, title_id, "EDIT");
+        let remarks = createElementFN("td", "", null, title_id, "view remarks");
+        EditRow(edit,pirority,title,user_td,created_date,expire_date)
+
+        if (user_category !== "") {
+          row.appendChild(tick);
+          row.appendChild(pirority);
+          row.appendChild(title);
+          row.appendChild(user_td);
+          row.appendChild(created_date);
+          row.appendChild(expire_date);
+          row.appendChild(showDetails);
+          row.appendChild(delete_);
+          row.appendChild(edit);
+          row.appendChild(remarks);
+
+          tableData[user_category].push({
+            title: user_value,
+            expire_status: false,
+            check_status: false,
+            id: title_id,
+            expire: date_time,
+            created_date: created_date_,
+            areaText: "",
+            comments: [],
+            piriority: user_pirority,
+            user: user,
+          });
+          localStorage.setItem("data", JSON.stringify(tableData));
+          console.log(tableData);
+          return row;
+        } else {
+          alert("please add or select category");
+        }
+      }
+      function add_category() {
+        let main_div = document.getElementById("main");
+        let user_input = document.getElementById("myInput1").value;
+        let user_category = document.getElementById("myInput1").value;
+        console.log(user_category);
+        let parent_select = document.getElementById("categories");
+        let parent_selectModal = document.getElementById("modalCategories");
+
+
+        let new_option = createElementFN(
+          "option",
+          user_input,
+          null,
+          `${user_input}c`,
+          user_input
+        );
+        let new_optionModal = createElementFN(
+          "option",
+          user_input,
+          null,
+          `${user_input}c`,
+          user_input
+        );
+        let button_div = createElementFN("div", "", null, "content");
+        let table = createElementFN(
+          "table",
+          "",
+          user_category,
+          `${user_category}`
+        );
+        let button = createElementFN(
+          "button",
+          `${user_category}b`,
+          "collapsible",
+          "collapsible",
+          `${user_category}`
+        );
+
+        parent_selectModal.appendChild(new_optionModal);
+        parent_select.appendChild(new_option);
+
+        table.appendChild(createTableHeading());
+        button_div.appendChild(table);
+        main_div.appendChild(button);
+        main_div.appendChild(button_div);
+        tableData[user_input] = [];
+        localStorage.setItem("data", JSON.stringify(tableData));
+      }
+
+      function addCurrentTime() {
+        let created_date = new Date();
+        return created_date;
+      }
+      function CurrentTime_calculate(createdDate, td) {
+        const initialDate = new Date(createdDate);
+        const finalDate = new Date();
+
+        const timeDifference = finalDate - initialDate;
+
+        // setInterval(function () {
+        const secondsDifference = Math.floor(timeDifference / 1000);
+        const minutesDifference = Math.floor(secondsDifference / 60);
+
+        const hoursDifference = Math.floor(minutesDifference / 60);
+        const daysDifference = Math.floor(hoursDifference / 24);
+        // },1000)
+
+        let display;
+        // let x = setInterval(function () {
+        if (daysDifference >= 1) {
+          // setInterval(function () {
+          display = `${daysDifference} day${daysDifference > 1 ? "s" : ""} ago`; //gpt
+          // },3600000)
+        } else if (hoursDifference >= 1) {
+          // setInterval(function () {
+
+          display = `${hoursDifference} hour${
+            hoursDifference > 1 ? "s" : ""
+          } ago`;
+          // },3600000)
+        } else if (minutesDifference >= 1) {
+          display = `${minutesDifference} minute${
+            minutesDifference > 1 ? "s" : ""
+          } ago`;
+        } else {
+          display = `${secondsDifference} second${
+            secondsDifference > 1 ? "s" : ""
+          } ago`;
+        }
+
+        // },1000);
+        return display;
+      }
+
+      function createdDate_mouseover(td, date_c) {
+        td.onmouseenter = function () {
+          console.log(td);
+          // alert(date_c);
+          td.innerHTML = date_c;
+          td.value = date_c;
+        };
+        td.onmouseleave = function () {
+          console.log("hello");
+
+          td.innerHTML = CurrentTime_calculate(date_c, td);
+        };
+      }
+
+      let categoryDIV = document.getElementsByClassName("collapsible");
+      console.log(categoryDIV.length);
+      for (let i = 0; i < categoryDIV.length; i++) {
+        console.log("working");
+        categoryDIV[i].addEventListener("click", function () {
+          this.classList.toggle("active");
+          let categoryDIV_child = this.nextElementSibling;
+          console.log(categoryDIV_child);
+          if (categoryDIV_child.style.display === "none") {
+            categoryDIV_child.style.display = "block";
+          } else {
+            categoryDIV_child.style.display = "none";
+          }
+        });
+      }
+      function addNewUser() {
+        let user = document.getElementById("user_name").value;
+        let user_select = document.getElementById("users");
+        let option = createElementFN("option", user, null, null, user);
+
+        if (user !== "") {
+          user_select.appendChild(option);
+        } else {
+          alert("please enter the user");
+        }
+        document.getElementById("user_name").value = "";
+      }
+
+      function timer(td, end_time, created_dt, row) {
+        if (end_time != "") {
+          var countDownDate = new Date(end_time).getTime();
+          console.log("workinggg");
+        } else {
+          let dat = document.getElementById("date").value;
+          let tim = document.getElementById("time").value;
+          console.log(dat);
+          console.log(tim);
+          let date_time = dat + " " + tim;
+          console.log(date_time);
+          var countDownDate = new Date(date_time).getTime();
+          console.log(countDownDate);
+        }
+        let timer_display = "";
+
+        // Update the count down every 1 second
+        var x = setInterval(function () {
+          // Get today's date and time
+          var now = new Date().getTime();
+
+          // Find the distance between now and the count down date
+          var distance = countDownDate - now;
+
+          // Time calculations for days, hours, minutes and seconds
+          var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+          var hours = Math.floor(
+            (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+          );
+          var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+          var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+          let timer_display_content =
+            days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
+          timer_display = timer_display_content;
+          td.innerHTML = timer_display;
+          td.value = timer_display;
+          if (distance < 0) {
+            // clearInterval(x);
+            td.innerHTML = "expired";
+            td.value = "expired";
+            row.style.backgroundColor = "red";  
+            Object.keys(tableData).forEach(function (key) {
+              for (let y of tableData[key]) {
+                if (y.id == td.id) {
+                  y.expire_status =  true;
+                  localStorage.setItem("data", JSON.stringify(tableData));
+                  break;
+                }
+              }
+            });   
+            td.onmouseenter = function () {
+              td.innerHTML = "Over due: " + timer_display;
+              td.value = timer_display;
+            };
+            td.onmouseleave = function () {
+              td.innerHTML = "expired";
+
+            };
+          }
+        }, 1000);
+      }
+
+      function button_event(btn, length, cat) {
+        btn.onmouseenter = function () {
+          btn.innerHTML = cat + "   " + `click to view ${length} tasks`;
+        };
+        btn.onmouseleave = function () {
+          btn.innerHTML = cat;
+        };
+      }
+      function delete_action(td) {
+        td.onclick = function () {
+          console.log(this.parentElement.id);
+          let parent = this.parentElement;
+          let id = this.id;
+          parent.remove();
+
+          checkDeleteStatusFN("delete", id);
+        };
+      }
+      function markDoneAction(td,row){
+        td.onclick = function(){
+          let parent = this.parentElement;
+          let child = parent.childNodes
+          console.log(child[2])
+          let task = child[2];
+          task.style.textDecoration = "line-through";
+          td.innerHTML = "completed";
+          row.style.backgroundColor = "green"; 
+          Object.keys(tableData).forEach(function (key) {
+              for (let y of tableData[key]) {
+                if (y.id == td.id) {
+                  y.check_status =  true;
+                  localStorage.setItem("data", JSON.stringify(tableData));
+                  break;
+                }
+              }
+            });
+        }
+      }
+      function ShowDetails(td,areaText){
+        let modal = document.getElementById("detailsModal") 
+        let text_Area = document.getElementById("myTextarea");
+        td.onclick = function(){
+          modal.style.display = "block";
+          text_Area.innerHTML = areaText;
+          text_Area.value = areaText;
+          text_Area.onkeyup = function () {
+            let user_textArea = document.getElementById("myTextarea").value;
+            Object.keys(tableData).forEach(function (key) {
+              for (let y of tableData[key]) {
+                console.log(y.id);
+                console.log(td.id);
+                if (y.id == td.id) {
+                  console.log("found")
+                  y.areaText = user_textArea;
+                  localStorage.setItem("data", JSON.stringify(tableData));
+                  break;
+                }
+              }
+            });
+          };
+        }
+        let span = document.getElementById("closeModal")
+        span.onclick = function () {
+          modal.style.display = "none";
+          let text_Area = document.getElementById("myTextarea");
+          text_Area.value = "";
+          document.getElementById("myTextarea").innerHTML = areaText;
+
+        };
+        window.onclick = function (event) {
+          if (event.target == modal) {
+            modal.style.display = "none";
+            text_Area.innerHTML = "";
+            text_Area.value = "";
+            document.getElementById("myTextarea").innerHTML = areaText;
+
+          }
+        };
+      }
+      function EditRow(edit,piriority,task,assigned_to,created_date,due,row){
+
+        let modalInput = document.getElementById("modalInput");       
+        let modal = document.getElementById("editModal") 
+        let saveEdits = document.getElementById("saveEdits");
+        let move_btn = document.getElementById("move");
+
+
+        edit.onclick = function(){
+          modal.style.display = "block";
+          modalInput.value = task.value;
+          modalInput.innerHTML = task.innerHTML; 
+          let Parentrow = edit.parentElement; 
+          console.log(Parentrow);   
+          move_btn.onclick = function() {
+          changeCategory(Parentrow);
+        }
+        }
+        let span = document.getElementById("closeEditModal")
+        span.onclick = function () {
+          modal.style.display = "none";
+        };
+        window.onclick = function (event) {
+          if (event.target == modal) {
+            modal.style.display = "none";                
+          }
+        };
+        saveEdits.onclick = function () {
+         saveAction(edit,piriority,task,assigned_to,created_date,due)
+        }      
+      }
+
+      function saveAction(edit,piriority,task,assigned_to,created_date,due){
+         let modalInput = document.getElementById("modalInput");  
+        let modaldate = document.getElementById("modaldate");
+        let modaltime = document.getElementById("modaltime");
+        let Categories = document.getElementById("categories");
+        let modalPirority = document.getElementById("modalPirority");
+        let modalUsers = document.getElementById("modalUsers");
+        let saveEdits = document.getElementById("saveEdits");
+
+        task.innerHTML = modalInput.value;
+        task.value = modalInput.value;
+
+        let expire_date = modaldate.value + " " + modaltime.value;
+        due.innerHTML = expire_date;
+        due.value = expire_date;
+
+        piriority.innerHTML = modalPirority.value;
+        piriority.value = modalPirority.value;
+
+        assigned_to.value = modalUsers.value;
+        assigned_to.innerHTML = modalUsers.value;
+
+        let edited_date = new Date();
+
+        Object.keys(tableData).forEach(function (key) {
+              for (let y of tableData[key]) {
+                if (y.id == edit.id) {
+                  y.expire_status =  false;
+                  y.check_status = false;
+                  y.created_date = edited_date;
+                  y.title = modalInput.value;
+                  y.expire = expire_date;
+                  y.piriority = modalPirority.value;
+                  y.user = modalUsers.value;
+                  localStorage.setItem("data", JSON.stringify(tableData));
+                  break;
+                }
+              }
+            });  
+      }
+
+      function changeCategory(x){
+        console.log(x);
+        let category = document.getElementById("modalCategories").value;
+        let row = x;
+        let table = row.parentElement;
+        let p_ = table.id;
+        let addINTable = document.getElementById(category);
+        // row.remove();
+        addINTable.appendChild(row);
+        let order = document.getElementsByTagName("tr");
+        let find_initialEle = tableData[p_].findIndex((obj) => obj.id == x.id);
+            let new_ = tableData[p_][find_initialEle];  
+            console.log(tableData[p_].splice(find_initialEle, 1));
+            tableData[category].push(new_);
+            localStorage.setItem("data", JSON.stringify(tableData));           
+      }
+
+      function viewRemaks(td){
+        let modal = document.getElementById("commentsModal") 
+        let ul = document.getElementById("cmnt") 
+        let add = document.getElementById("addCmntBtn");
+
+       td.onclick = function(){
+          modal.style.display = "block";
+          let Parentrow = td.parentElement; 
+          getComments(Parentrow)
+
+          add.onclick = function(){
+           addComment(ul,Parentrow);
+          }
+       }
+       //not working
+       window.onclick = function (event) {
+         if (event.target == modal) {
+           modal.style.display = "none";                
+          }
+        };
+        
+        let span = document.getElementById("closeCmntModal")
+         span.onclick = function () {
+           modal.style.display = "none";
+         };
+         
+      }
+      function addComment(ul,x){
+        let user_cmnt = document.getElementById("cmntInput").value;
+        let li_length = document.getElementsByTagName("li");
+        let id_cmnt = li_length.length + 1;
+        // let li = createElementFN("li",user_cmnt,null,id_cmnt,user_cmnt);
+        let row = x;
+        let passInDelete = x.id;
+
+        let table = row.parentElement;
+        let p_ = table.id;
+        console.log(x.id);
+        if (user_cmnt == "") {
+              alert("comment cant be empty");
+            } else {
+              let cmnt_li = createElementFN("li", "", null, id_cmnt, user_cmnt);
+              console.log(cmnt_li)
+              deleteComents(cmnt_li,passInDelete);
+              // addButton(cmnt_li, li.id);
+              let find_obj = tableData[p_].findIndex((obj) => obj.id == x.id);
+              console.log(find_obj)
+              // console.log(tableData[tt1][find_obj][comments]);
+              Object.keys(tableData).forEach(function (key) {
+                for (let y of tableData[key]) {
+                  console.log(y)
+                  if (y.id == x.id) {
+                    // console.log(tableData[tt1][find_obj][y.comments]);
+                    console.log(y.comments);
+                    tableData[p_][find_obj].comments.push({
+                      title: user_cmnt,
+                      id: id_cmnt,
+                      del: false,
+                    });
+                    // let ul = document.getElementById("cmnt");
+                    ul.appendChild(cmnt_li);
+                    localStorage.setItem("data", JSON.stringify(tableData));
+                    break;
+                  }
+                }
+              });
+            } 
+             document.getElementById("cmntInput").value = "";
+      }
+      function getComments(x){
+        console.log("weeeeeee")
+        console.log(x)
+        let passInDelete = x.id;
+
+        let ul = document.getElementById("cmnt");
+          let child_count = ul.childElementCount;
+          // gpt
+          if (child_count > 0) {
+            while (ul.firstChild) {
+              ul.removeChild(ul.firstChild);
+            }
+          }
+          Object.keys(tableData).forEach(function (key) {
+            for (let y of tableData[key]) {
+              if (y.id == x.id) {
+                for (let x in y.comments) {
+                  console.log(y.comments[x]);
+                  let li_cmnt = createElementFN(
+                    "li",
+                    "",
+                    null,
+                    y.comments[x].id,
+                    y.comments[x].title
+                  );
+                  deleteComents(li_cmnt,passInDelete);
+                  // addButton(li_cmnt, li.id);
+                  let ul = document.getElementById("cmnt");
+                  // console.log(y.comments[x].del + "dellllll statussss");
+                  ul.appendChild(li_cmnt);
+                }
+                break;
+              }
+            }
+          });
+      }
+      function deleteComents(li,z){
+        let x = createElementFN("SPAN", "", "close", null, "\u00D7");
+        li.appendChild(x);
+        x.onclick = function(){
+          let  li_ = x.parentElement;
+          li_.remove()
+          let row = document.getElementById(z);
+        let table = row.parentElement;
+        console.log(row);
+        let p_ = table.id;
+        console.log(p_);
+              let find_obj = tableData[p_].findIndex((obj) => obj.id == z);
+              Object.keys(tableData).forEach(function (key) {
+                for (let y of tableData[key]) {
+                  console.log(y)
+                  if (y.id == z) {
+                    let commentsArray = tableData[p_][find_obj].comments;
+                    // for(let z in commentsArray ){
+                      let find_obj_ = tableData[p_][find_obj].comments.findIndex((obj) => obj.id == li_.id);
+                      tableData[p_][find_obj].comments.splice(find_obj_,1);
+                        localStorage.setItem("data", JSON.stringify(tableData));
+                    break;
+                  }
+                }
+              });           
+        }
+    };
+      //
+    </script>
+  </body>
+</html>
